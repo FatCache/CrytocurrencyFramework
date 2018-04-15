@@ -38,7 +38,6 @@ public class Transaction {
 	
 	
 	// Setters & Getters
-	
 
 	public int getTransactionid() {
 		return transactionid;
