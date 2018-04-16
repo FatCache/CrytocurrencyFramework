@@ -4,7 +4,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.my.spring.pojo.User;
+
+import com.me.crypto.pojo.User;
 
 public class UserValidator implements Validator {
 
@@ -14,14 +15,13 @@ public class UserValidator implements Validator {
 
 	public void validate(Object obj, Errors errors) {
 		User user = (User) obj;
+		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "error.invalid.user", "First Name Required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "error.invalid.user", "Last Name Required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "error.invalid.user", "User Name Required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "error.invalid.password", "Password Required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email.emailAddress", "error.invalid.email.emailAddress",
-				"Email Required");
-		
-		// check if user exists
-		
+
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userBankDetail.bankName", "error.invalid.userBankDetail.bankName", "Password Required");		
 	}
 }
+

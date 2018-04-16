@@ -4,6 +4,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 
 import com.me.crypto.exception.UserException;
+import com.me.crypto.pojo.User;
+import com.me.crypto.pojo.UserBankDetails;
 
 
 public class UserDAO extends DAO {
@@ -44,17 +46,21 @@ public class UserDAO extends DAO {
 			throws UserException {
 		try {
 			begin();
-			System.out.println("inside DAO");
-
-			Email email = new Email(u.getEmail().getEmailAddress());
+			System.out.println("inside UserDAO-Register");
+			
+			UserBankDetails userBankDetails = new UserBankDetails();
+			userBankDetails.setBankName(u.getUserBankDetail().getBankName());
+			userBankDetails.setBalance(u.getUserBankDetail().getBalance());
+			userBankDetails.setCreditCardNumber(u.getUserBankDetail().getCreditCardNumber());
+			userBankDetails.setCsv(u.getUserBankDetail().getCsv());
+			userBankDetails.setCreditCardNumber(u.getUserBankDetail().getCreditCardNumber());			
+			
 			User user = new User(u.getUsername(), u.getPassword());
-
-			user.setFirstName(u.getFirstName());
-			user.setLastName(u.getLastName());
+			user.setFirstname(u.getFirstname());
+			user.setLastName(u.getLastName());	
 			
+			user.setUserBankDetail(userBankDetails);
 			
-			user.setEmail(email);
-			email.setUser(user);
 			getSession().save(user);
 			commit();
 			return user;

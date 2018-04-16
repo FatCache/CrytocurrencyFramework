@@ -1,5 +1,7 @@
 package com.me.crypto.pojo;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,20 +22,24 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "transactionid")
 	private int transactionid;
-	@Column(name = "user")
+	@Column(name = "user") // Do I need this?
 	private User user;
 	@Column(name = "amount")
 	private double amount;
 	@Column(name = "date")
-	private Date date;
+	private String date;
 	@Column(name = "status")
 	private boolean status;
 	
 	@OneToMany
-	private Set<Coin> coins; // Transaction is composed of two coins ony
+	private Set<Coin> coins; // A sransaction is composed of two coins type
 	
 	public Transaction() {
-		coins = new HashSet<Coin>();		
+		coins = new HashSet<Coin>();
+		
+		DateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date dateCreate = new Date();
+		this.date = dateformat.format(dateCreate);
 	}
 	
 	
@@ -63,13 +69,17 @@ public class Transaction {
 		this.amount = amount;
 	}
 
-	public Date getDate() {
+
+
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+
+	public void setDate(String date) {
 		this.date = date;
 	}
+
 
 	public boolean isStatus() {
 		return status;

@@ -28,7 +28,9 @@ public class User extends Person {
 	private UserBankDetails userBankDetail;
 	
 	
-	private User() {
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
 		transactions = new HashSet<Transaction>();
 	}
 	

@@ -6,7 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import com.me.crypto.pojo.User;
 
 @Entity
 @Table(name="userbankdetail_table")
@@ -25,6 +28,10 @@ public class UserBankDetails {
 	private int creditCardNumber;
 	@Column(name="csv")
 	private int csv;
+	
+	@OneToOne
+	@PrimaryKeyJoinColumn
+	private User user;
 	
 	public UserBankDetails() {}
 	
@@ -60,6 +67,16 @@ public class UserBankDetails {
 	public void setCsv(int csv) {
 		this.csv = csv;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	 
 	
 	
 	

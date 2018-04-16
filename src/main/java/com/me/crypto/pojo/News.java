@@ -1,5 +1,8 @@
 package com.me.crypto.pojo;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,13 +28,20 @@ public class News {
 	private String message;
 
 	@Column(name="dateCreated")
-	private Date dateCreated;
+	private String dateCreated;
+	
+	@Column(name="coinConcerned")
+	private String coinConcern;
 	
 	@OneToMany
-	private Set<Coin> coins;
+	private Set<Coin> coins; // Better if hashtable <String, Coin> to store Coin object with simple coin name.
 	
 	public News() {
-		coins = new HashSet<Coin>();
+		coins = new HashSet<Coin>(); // Might be usedles
+		
+		DateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		this.dateCreated = dateformat.format(date);
 	}
 
 	// Setters & Getters
@@ -52,14 +62,6 @@ public class News {
 		this.message = message;
 	}
 
-	public Date getDateCreated() {
-		return dateCreated;
-	}
-
-	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
-	}
-
 	public Set<Coin> getCoins() {
 		return coins;
 	}
@@ -67,6 +69,25 @@ public class News {
 	public void setCoins(Set<Coin> coins) {
 		this.coins = coins;
 	}
+
+	public String getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public String getCoinConcern() {
+		return coinConcern;
+	}
+
+	public void setCoinConcern(String coinConcern) {
+		this.coinConcern = coinConcern;
+	}
+	
+	
+	
 	
 	
 }
