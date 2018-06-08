@@ -15,13 +15,14 @@ import com.me.crypto.pojo.User;
 
 public class NewsDAO extends DAO{
 	
-	public List<News> get(String coinConcern) throws NewsException {
+	public List<News> getNews(String coinConcern) throws NewsException {
         try {
             begin();
             Query q=getSession().createQuery("from News where coinConcern= :coinConcern");
-            q.setString("coinType",coinConcern);
+            q.setString("coinConcern",coinConcern);
             List<News> newsList = q.list();
             commit();
+            close();
             return newsList;
         } catch (HibernateException e) {
             rollback();
@@ -36,6 +37,7 @@ public class NewsDAO extends DAO{
             begin();
             getSession().save(news);
             commit();
+            close();
             return news;
         } catch (HibernateException e) {
             rollback();
@@ -48,6 +50,7 @@ public class NewsDAO extends DAO{
             begin();
             getSession().update(news);
             commit();
+            close();
         } catch (HibernateException e) {
             rollback();
             throw new NewsException("Exception while updating News: " + e.getMessage(),e);
@@ -59,6 +62,7 @@ public class NewsDAO extends DAO{
             begin();
             getSession().delete(news);
             commit();
+            close();
         } catch (HibernateException e) {
             rollback();
             throw new NewsException("Exception while deleting News: " + e.getMessage(),e);

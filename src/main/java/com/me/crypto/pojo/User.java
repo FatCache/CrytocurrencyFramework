@@ -9,8 +9,7 @@ import javax.persistence.*;
 @Table(name="user_table")
 @PrimaryKeyJoinColumn(name = "personid")
 public class User extends Person {
-	
-	@Id
+
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="userid")
 	private int userId;
@@ -21,26 +20,42 @@ public class User extends Person {
 	@Column(name="password")
 	private String password;
 	
-	@OneToMany
+	
+	@OneToMany(cascade = CascadeType.ALL) 
 	private Set<Transaction> transactions;
 		
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private UserBankDetails userBankDetail;
 	
+	@OneToOne(cascade = CascadeType.ALL)
+	private Person person;
 	
-	public User(String username, String password) {
-		this.username = username;
-		this.password = password;
+	
+	public User() {
 		transactions = new HashSet<Transaction>();
 	}
 	
 	
 	
 	// Setters & Getters
-
+	
+	
+	
 	public int getUserId() {
 		return userId;
 	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+
+
+	public void setPerson(Person person) {
+		this.person = person;
+	}
+
+
 
 	public void setUserId(int userId) {
 		this.userId = userId;

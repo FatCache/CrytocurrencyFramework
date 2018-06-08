@@ -4,5 +4,12 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<bean id="userDao" class="com.me.crypto.dao.UserDAO" ></bean>
+	<bean id="coinDao" class="com.me.crypto.dao.CoinDAO" ></bean>
+	<bean id="newsDao" class="com.me.crypto.dao.NewsDAO" ></bean>
+	<bean id="transactionDao" class="com.me.crypto.dao.TransactionDAO"></bean>
+	
+	
 		
 </beans>

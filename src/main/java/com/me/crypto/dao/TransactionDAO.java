@@ -1,12 +1,15 @@
 package com.me.crypto.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import javax.transaction.TransactionalException;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
 
 import com.me.crypto.pojo.Transaction;
 import com.me.crypto.pojo.User;
@@ -22,6 +25,7 @@ public class TransactionDAO extends DAO {
             q.setString("transactionid",transactionid);
             Transaction transaction=(Transaction)q.uniqueResult();
             commit();
+            close();
             return transaction;
         } catch (HibernateException e) {
             rollback();
@@ -38,10 +42,36 @@ public class TransactionDAO extends DAO {
     		User user = (User) q.uniqueResult();
     		Set<Transaction> transactionList = user.getTransactions(); //?
             commit();
+            
             return transactionList;
         } catch (HibernateException e) {
             rollback();
             throw new TransactionalException("Could not obtain the list for PersonId " + personID + " " + e.getMessage(), e);
+        }
+    }
+    
+    public ArrayList<Transaction> listAll() throws TransactionalException {
+        try {
+            begin();
+            Criteria cri = getSession().createCriteria(Transaction.class);
+            
+            return (ArrayList<Transaction>) cri.list();
+        } catch (HibernateException e) {
+            rollback();
+            throw new TransactionalException("Could not obtain the list for all transaction " + e.getMessage(), e);
+        }
+    }
+    
+    public ArrayList<Transaction> listAllUser(int personid) throws TransactionalException {
+        try {
+            begin();
+            Criteria cri = getSession().createCriteria(Transaction.class);
+            cri.createAlias("user","user").add(Restrictions.eq("user.personid", personid));            
+            //close();
+            return (ArrayList<Transaction>) cri.list();
+        } catch (HibernateException e) {
+            rollback();
+            throw new TransactionalException("Could not obtain the list for all transaction " + e.getMessage(), e);
         }
     }
 
@@ -50,6 +80,7 @@ public class TransactionDAO extends DAO {
             begin();
             getSession().save(transaction);
             commit();
+            
             return transaction;
         } catch (HibernateException e) {
             rollback();

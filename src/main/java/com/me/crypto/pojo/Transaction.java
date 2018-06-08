@@ -6,13 +6,20 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "transaction_table")
@@ -22,17 +29,31 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "transactionid")
 	private int transactionid;
-	@Column(name = "user") // Do I need this?
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "userid")
 	private User user;
+	
 	@Column(name = "amount")
 	private double amount;
+	
 	@Column(name = "date")
 	private String date;
+	
 	@Column(name = "status")
 	private boolean status;
 	
-	@OneToMany
-	private Set<Coin> coins; // A sransaction is composed of two coins type
+	@ManyToMany(cascade = CascadeType.ALL)
+	private Set<Coin> coins; // A transaction is only composed of two points only
+	
+	@Transient
+	String coinA;
+	
+	@Transient
+	String coinB;
+	
+	@Transient
+	String passedByPersonId;
 	
 	public Transaction() {
 		coins = new HashSet<Coin>();
@@ -96,6 +117,40 @@ public class Transaction {
 	public void setCoins(Set<Coin> coins) {
 		this.coins = coins;
 	}
+
+
+	public String getCoinA() {
+		return coinA;
+	}
+
+
+	public void setCoinA(String coinA) {
+		this.coinA = coinA;
+	}
+
+
+	public String getCoinB() {
+		return coinB;
+	}
+
+
+	public void setCoinB(String coinB) {
+		this.coinB = coinB;
+	}
+
+
+	public String getPassedByPersonId() {
+		return passedByPersonId;
+	}
+
+
+	public void setPassedByPersonId(String passedByPersonId) {
+		this.passedByPersonId = passedByPersonId;
+	}
+	
+	
+
+
 	
 
 	

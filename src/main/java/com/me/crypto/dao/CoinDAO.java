@@ -22,6 +22,7 @@ public class CoinDAO extends DAO {
             q.setString("coinId",coinId);
             Coin coin=(Coin)q.uniqueResult();
             commit();
+            close();
             return coin;
         } catch (HibernateException e) {
             rollback();
@@ -37,20 +38,41 @@ public class CoinDAO extends DAO {
     		q.setParameter("coinType", coinType);
     		List<Coin> coinList = q.list();
             commit();
+            close();
             return coinList;
         } catch (HibernateException e) {
             rollback();
             throw new CoinException("Could not obtain the list for Cointype " + coinType + " " + e.getMessage(), e);
         }
     }
-
-    public Coin create() throws CoinException {
+    
+    // Simple coin list retrieval from database
+    public List<Coin> list() throws CoinException {
         try {
             begin();
-            Coin coin = new Coin();
-            getSession().save(coin);
+    		Query q = getSession().createQuery("from Coin");
+    		List<Coin> coinList = q.list();
             commit();
-            return coin;
+            close();
+            return coinList;
+        } catch (HibernateException e) {
+            rollback();
+            throw new CoinException("Could not obtain the list of " + e.getMessage(), e);
+        }
+    }
+
+    public Coin create(Coin coin) throws CoinException {
+        try {
+            begin();
+            Coin c = new Coin();
+            c.setName(coin.getName());
+            c.setCoinType(coin.getCoinType());
+            c.setWorth(coin.getWorth());
+            
+            getSession().save(c);
+            commit();
+            close();
+            return c;
         } catch (HibernateException e) {
             rollback();
             //throw new AdException("Could not create the category", e);
@@ -62,7 +84,9 @@ public class CoinDAO extends DAO {
         try {
             begin();
             getSession().update(coin);
+            
             commit();
+            close();
         } catch (HibernateException e) {
             rollback();
             throw new CoinException("Exception while updating Coin: " + e.getMessage(),e);
@@ -74,6 +98,7 @@ public class CoinDAO extends DAO {
             begin();
             getSession().delete(coin);
             commit();
+            close();
         } catch (HibernateException e) {
             rollback();
             throw new CoinException("Exception while deleting Coin: " + e.getMessage(),e);

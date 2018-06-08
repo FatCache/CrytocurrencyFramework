@@ -20,4 +20,31 @@
     <servlet-name>appServlet</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+  
+  <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>CryptocurrencySecureSite</web-resource-name>
+         <url-pattern>/coin/*</url-pattern>
+         <http-method>GET</http-method>
+         <http-method>POST</http-method>
+      </web-resource-collection>
+      
+      <auth-constraint>
+         <description>
+            Let only admin create/view/update/delete coin
+         </description>
+         <role-name>admin</role-name>
+      </auth-constraint>
+   </security-constraint>
+   
+   <security-role>
+      <role-name>admin</role-name>
+   </security-role>
+   
+   <login-config>
+      <auth-method>BASIC</auth-method>
+      <realm-name>Welcome To World of Crypto</realm-name>
+   </login-config>
+  
+  
 </web-app>

@@ -1,5 +1,6 @@
 package com.me.crypto.pojo;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cascade;
 
 import com.me.crypto.pojo.User;
 
@@ -29,11 +33,15 @@ public class UserBankDetails {
 	@Column(name="csv")
 	private int csv;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	private User user;
 	
-	public UserBankDetails() {}
+	@Transient
+	int passedByUserId;
+	
+	public UserBankDetails() {
+	}
 	
 	// Setters & Getters
 	
@@ -74,6 +82,14 @@ public class UserBankDetails {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public int getPassedByUserId() {
+		return passedByUserId;
+	}
+
+	public void setPassedByUserId(int passedByUserId) {
+		this.passedByUserId = passedByUserId;
 	}
 	
 	 

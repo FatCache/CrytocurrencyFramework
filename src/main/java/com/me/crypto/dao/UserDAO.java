@@ -1,18 +1,29 @@
 package com.me.crypto.dao;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.criterion.Example;
 
 import com.me.crypto.exception.UserException;
 import com.me.crypto.pojo.User;
 import com.me.crypto.pojo.UserBankDetails;
 
 
+
 public class UserDAO extends DAO {
 	
 	public UserDAO() {
-	}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-
+	}       
+	
+	public User authenticate(User user) {
+		
+		Criteria c = getSession().createCriteria(User.class);
+		c.add(Example.create(user));		
+		User u = (User) c.uniqueResult();		
+		return u;
+	}
+	
 	public User get(String username, String password) throws UserException {
 		try {
 			begin();
@@ -31,8 +42,8 @@ public class UserDAO extends DAO {
 	public User get(int userId) throws UserException {
 		try {
 			begin();
-			Query q = getSession().createQuery("from User where personID= :personID");
-			q.setInteger("personID", userId);		
+			Query q = getSession().createQuery("from User where personid= :personid");
+			q.setInteger("personid", userId);		
 			User user = (User) q.uniqueResult();
 			commit();
 			return user;
@@ -47,19 +58,12 @@ public class UserDAO extends DAO {
 		try {
 			begin();
 			System.out.println("inside UserDAO-Register");
-			
-			UserBankDetails userBankDetails = new UserBankDetails();
-			userBankDetails.setBankName(u.getUserBankDetail().getBankName());
-			userBankDetails.setBalance(u.getUserBankDetail().getBalance());
-			userBankDetails.setCreditCardNumber(u.getUserBankDetail().getCreditCardNumber());
-			userBankDetails.setCsv(u.getUserBankDetail().getCsv());
-			userBankDetails.setCreditCardNumber(u.getUserBankDetail().getCreditCardNumber());			
-			
-			User user = new User(u.getUsername(), u.getPassword());
+
+			User user = new User();
 			user.setFirstname(u.getFirstname());
-			user.setLastName(u.getLastName());	
-			
-			user.setUserBankDetail(userBankDetails);
+			user.setLastname(u.getLastname());
+			user.setPassword(u.getPassword());
+			user.setUsername(u.getUsername());
 			
 			getSession().save(user);
 			commit();
@@ -69,6 +73,30 @@ public class UserDAO extends DAO {
 			rollback();
 			throw new UserException("Exception while creating user: " + e.getMessage());
 		}
+	}
+	
+	public void registerbankdetails(UserBankDetails u, User user) throws UserException {
+		try {
+			begin();
+		UserBankDetails userBankDetails = new UserBankDetails();
+		userBankDetails.setBankName(u.getBankName());
+		userBankDetails.setBalance(u.getBalance());
+		userBankDetails.setCreditCardNumber(u.getCreditCardNumber());
+		userBankDetails.setCsv(u.getCsv());
+		userBankDetails.setCreditCardNumber(u.getCreditCardNumber());
+		
+		user.setUserBankDetail(userBankDetails);
+		
+		getSession().update(user);
+		commit();
+		
+		
+		}
+		catch (HibernateException e) {
+			rollback();
+			throw new UserException("Exception while registering user details & updateing: " + e.getMessage());
+		}
+		
 	}
 
 	public void delete(User user) throws UserException {
@@ -81,5 +109,16 @@ public class UserDAO extends DAO {
 			throw new UserException("Could not delete user " + user.getUsername(), e);
 		}
 	}
-
+	
+	
+    public void update(User user) throws UserException {
+        try {
+            begin();
+            getSession().update(user);
+            commit();
+        } catch (HibernateException e) {
+            rollback();
+            throw new UserException("Could not update user ", e);
+        }
+    }
 }

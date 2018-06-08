@@ -1,5 +1,6 @@
 package com.me.crypto.pojo;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,15 +19,15 @@ public class Person {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="personid",unique=true,nullable=false)
-	private long personid;
+	private int personid;
 	
 	@Column(name="fName")
 	private String firstname;
 	
 	@Column(name="lName")
-	private String lastName;
+	private String lastname;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	User user;
 	
 	public Person() {}
@@ -38,7 +39,7 @@ public class Person {
 		return personid;
 	}
 
-	public void setPersonid(long personid) {
+	public void setPersonid(int personid) {
 		this.personid = personid;
 	}
 
@@ -50,13 +51,26 @@ public class Person {
 		this.firstname = firstname;
 	}
 
-	public String getLastName() {
-		return lastName;
+
+	public String getLastname() {
+		return lastname;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
-	
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
 	
 }

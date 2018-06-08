@@ -1,11 +1,20 @@
 package com.me.crypto.pojo;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.springframework.core.style.ToStringCreator;
 
 @Entity
 @Table(name="coin_table")
@@ -20,12 +29,20 @@ public class Coin {
 	private String name;
 	
 	@Column(name="worth")
-	private double worth; // Against one barrel of oil
+	private double worth; 
 	
 	@Column(name="coinType")
 	private String coinType;
 	
-	public Coin() {}
+	@Column(name = "date")
+	private String date;
+	
+	public Coin() {
+		
+		DateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date dateCreate = new Date();
+		this.date = dateformat.format(dateCreate);
+	}
 	
 	// Setters & Getters
 
@@ -61,7 +78,21 @@ public class Coin {
 		this.coinType = coinType;
 	};
 	
+	@Override 
+	public String toString(){
+		return name;
+	}
 
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	
+	
 	
 	
 }

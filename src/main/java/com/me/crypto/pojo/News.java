@@ -30,15 +30,11 @@ public class News {
 	@Column(name="dateCreated")
 	private String dateCreated;
 	
-	@Column(name="coinConcerned")
+	@Column(name="coinConcern")
 	private String coinConcern;
 	
-	@OneToMany
-	private Set<Coin> coins; // Better if hashtable <String, Coin> to store Coin object with simple coin name.
-	
 	public News() {
-		coins = new HashSet<Coin>(); // Might be usedles
-		
+
 		DateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
 		this.dateCreated = dateformat.format(date);
@@ -60,14 +56,6 @@ public class News {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public Set<Coin> getCoins() {
-		return coins;
-	}
-
-	public void setCoins(Set<Coin> coins) {
-		this.coins = coins;
 	}
 
 	public String getDateCreated() {
